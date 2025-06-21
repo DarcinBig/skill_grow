@@ -34,7 +34,7 @@ const Navbar = () => {
         ) : (
           <button
             onClick={() => openSignIn()}
-            className="bg-blue-600 text-white px-5 py-2 rounded-full"
+            className="bg-blue-600 text-white px-5 py-2 rounded-full cursor-pointer"
           >
             Create Account
           </button>
