@@ -12,7 +12,6 @@ const CallToAction = () => {
         <button className='px-10 py-3 rounded-md text-white bg-blue-600 cursor-pointer'>Get started</button>
         <button className='flex items-center gap-2 cursor-pointer'>Learn more <img src={assets.arrow_icon} alt="arrow_icon" /></button>
       </div>
-      <div></div>
     </div>
   )
 }
