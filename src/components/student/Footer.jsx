@@ -31,8 +31,8 @@ const Footer = () => {
           <h2 className='font-semibold text-white mb-5'>Subscribe to our newsletter</h2>
           <p className="text-sm text-white/80">The latest news, articles, and resources, sent to your inbox weekly.</p>
           <div className='flex items-center gap-2 pt-4'>
-            <input type="email" placeholder="Enter your email" className="border border-gray-500/30 bg-gray-800 placeholder-gray-500 outline-none w-64 h-9 rounded px-2 text-sm" />
-            <button>Subscribe</button>
+            <input type="email" placeholder="Enter your email" className="border border-gray-500/30 bg-gray-800 placeholder-gray-500 text-white outline-none w-64 h-9 rounded px-2 text-sm" />
+            <button className="bg-blue-600 w-24 h-9 text-white rounded cursor-pointer">Subscribe</button>
           </div>
         </div>
       </div>
