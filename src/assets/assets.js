@@ -104,24 +104,24 @@ export const dummyEducatorData = {
 export const dummyTestimonial = [
     {
         name: 'Donald Jackman',
-        role: 'SWE 1 @ Amazon',
+        role: 'Software Engineer 1 @ Amazon',
         image: assets.profile_img_1,
         rating: 5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Skill Grow has been a game-changer for me. The courses are well-structured and the instructors are top-notch. I\'ve learned so much in such a short time.',
     },
     {
         name: 'Richard Nelson',
-        role: 'SWE 2 @ Samsung',
+        role: 'Back-end & Cloud Engineer @ Samsung',
         image: assets.profile_img_2,
         rating: 4,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Learning with Skill Grow has been an amazing experience. The platform is user-friendly and the content is always up-to-date. I highly recommend it to anyone looking to enhance their skills.',
     },
     {
         name: 'James Washington',
-        role: 'SWE 2 @ Google',
+        role: 'Senior AI Architect @ Apple',
         image: assets.profile_img_3,
         rating: 4.5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Skill Grow has transformed the way I learn. The interactive courses and practical projects have helped me apply my knowledge effectively. I feel more confident in my skills now.',
     },
 ];
 
