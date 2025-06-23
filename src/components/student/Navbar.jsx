@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react"
 import { assets } from "../../assets/assets"
+import { AppContext } from "../../context/AppContext"
 
 const Navbar = () => {
+
+  const {navigate, isEducator} = useContext(AppContext)
+
   const isCourseListPage = location.pathname.includes("/course-list")
 
   const { openSignIn } = useClerk()
@@ -16,15 +20,16 @@ const Navbar = () => {
       }`}
     >
       <img
+        onClick={() => navigate("/")}
         src={assets.logo}
         alt="logo"
-        className="w-28 lg:w-32 cursor-pointer"
+        className="w-28 lg:w-48 cursor-pointer"
       />
       <div className="hidden md:flex items-center gap-5 text-gray-500">
         <div className="flex items-center gap-5">
           {user && (
             <>
-              <button>Become Educator</button>
+              <button onClick={() => {navigate('/educator')}} className="cursor-pointer">{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button>
               | <Link to="/my-enrollments">My Enrollments</Link>
             </>
           )}
@@ -45,7 +50,7 @@ const Navbar = () => {
         <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
           {user &&
             <>
-              <button>Become Educator</button>
+              <button onClick={() => {navigate('/educator')}} className="cursor-pointer">{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button>
               | <Link to="/my-enrollments">My Enrollments</Link>
             </>
           }
