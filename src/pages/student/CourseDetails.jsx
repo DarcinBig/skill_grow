@@ -255,8 +255,3 @@ const CourseDetails = () => {
 };
 
 export default CourseDetails;
-
-// absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/70
-// absolute top-0 left-0 w-full md:pt-125 pt-20 px-7 md:px-0 space-y-7 bg-gradient-to-b from-cyan-100/70
-// md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800
-// max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]
