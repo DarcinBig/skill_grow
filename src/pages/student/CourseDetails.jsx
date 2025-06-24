@@ -173,9 +173,19 @@ const CourseDetails = () => {
               <p className='md:text-lg text-gray-500'>{courseData.discount}% off</p>
             </div>
             <div className='flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500'>
-              <div className='flex items-center gap-1'>
+              <div className="flex items-center gap-1">
                 <img src={assets.star} alt="star icon" />
                 <p>{calculateRating(courseData)}</p>
+              </div>
+              <div className="h-4 w-px bg-gray-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.time_clock_icon} alt="clock icon" />
+                <p>{calculateCourseDuration(courseData)}</p>
+              </div>
+              <div className="h-4 w-px bg-gray-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.lesson_icon} alt="lesson icon" />
+                <p>{calculateNumberOfLectures(courseData)} lessons</p>
               </div>
             </div>
           </div>
