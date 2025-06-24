@@ -81,7 +81,7 @@ const CourseDetails = () => {
             </p>
           </div>
           <p className="text-sm">
-            A course by{" "}
+            Course by{" "}
             <span className="text-blue-600 underline">
               <a href="#">Lord Drakonis</a>
             </span>
