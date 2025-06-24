@@ -24,13 +24,13 @@ const CourseDetails = () => {
     currency,
   } = useContext(AppContext);
 
-  const fetchCourseDate = async () => {
+  const fetchCourseData = async () => {
     const findCourse = allCourses.find((course) => course._id === id);
     setCourseData(findCourse);
   };
 
   useEffect(() => {
-    fetchCourseDate();
+    fetchCourseData();
   }, [allCourses]);
 
   const toggleSection = (index) => {
