@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import humanizeDuration from "humanize-duration";
-import { AppContext } from "../../context/AppContext";
+import React, { useContext, useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import humanizeDuration from "humanize-duration"
+import { AppContext } from "../../context/AppContext"
 import { assets } from "../../assets/assets";
-import Loading from "../../components/student/Loading";
+import Loading from "../../components/student/Loading"
 
 const CourseDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const [courseData, setCourseData] = useState(null);
-  const [openSection, setOpenSection] = useState({});
+  const [courseData, setCourseData] = useState(null)
+  const [openSection, setOpenSection] = useState({})
 
   const {
     allCourses,
@@ -17,23 +17,24 @@ const CourseDetails = () => {
     calculateChapterTime,
     calculateCourseDuration,
     calculateNumberOfLectures,
-  } = useContext(AppContext);
+    currency
+  } = useContext(AppContext)
 
   const fetchCourseDate = async () => {
-    const findCourse = allCourses.find((course) => course._id === id);
-    setCourseData(findCourse);
+    const findCourse = allCourses.find((course) => course._id === id)
+    setCourseData(findCourse)
   };
 
   useEffect(() => {
-    fetchCourseDate();
-  }, []);
+    fetchCourseDate()
+  }, [])
 
   const toggleSection = (index) => {
     setOpenSection((prev) => ({
       ...prev,
       [index]: !prev[index],
-    }));
-  };
+    }))
+  }
 
   return courseData ? (
     <>
@@ -159,7 +160,26 @@ const CourseDetails = () => {
           </div>
         </div>
         {/* right column */}
-        <div></div>
+        <div className='max-w-[450px] z-10 shadow-[0_4px_15px_2px_rgba(0,0,0,0.1)] rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]'>
+          <img src={courseData.courseThumbnail} alt="course thumbnail" />
+          <div className='p-5'>
+            <div className='flex items-center gap-2'>
+              <img className='w-3.5' src={assets.time_left_clock_icon} alt="time left clock icon" />
+              <p className='text-red-500'><span className='font-medium'>5 days</span> left at this price!</p>
+            </div>
+            <div className='flex gap-3 items-center pt-2'>
+              <p className='text-gray-800 md:text-4xl text-2xl font-medium'>{currency}{(courseData.coursePrice - courseData.discount * courseData.coursePrice / 100).toFixed(2)}</p>
+              <p className='md:text-lg text-gray-500 line-through'>{currency}{courseData.coursePrice}</p>
+              <p className='md:text-lg text-gray-500'>{courseData.discount}% off</p>
+            </div>
+            <div className='flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500'>
+              <div className='flex items-center gap-1'>
+                <img src={assets.star} alt="star icon" />
+                <p>{calculateRating(courseData)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   ) : (
@@ -172,3 +192,4 @@ export default CourseDetails;
 // absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/70
 // absolute top-0 left-0 w-full md:pt-125 pt-20 px-7 md:px-0 space-y-7 bg-gradient-to-b from-cyan-100/70
 // md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800
+// max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]
