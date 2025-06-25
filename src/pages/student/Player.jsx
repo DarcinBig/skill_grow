@@ -4,6 +4,8 @@ import { assets } from "../../assets/assets";
 import { useParams } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
+import Footer from "../../components/student/Footer";
+import Rating from "../../components/student/Rating";
 
 const Player = () => {
   const { enrolledCourses, calculateChapterTime } = useContext(AppContext);
@@ -112,18 +114,27 @@ const Player = () => {
                 </div>
               ))}
           </div>
+          <div className="flex items-center gap-2 py-3 mt-10">
+            <h1 className="text-xl font-black">Rate this course:</h1>
+            <Rating initialRating={0} />
+          </div>
         </div>
         {/* Right column */}
-        <div>
+        <div className="md:mt-10">
           {playerData ? (
             <div>
               <YouTube
-                videoId={playerData.lectureUrl.split('/').pop()}
+                videoId={playerData.lectureUrl.split("/").pop()}
                 iframeClassName="w-full aspect-video"
               />
-              <div>
-                <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
-                <button>Mark Complete</button>
+              <div className="flex justify-between items-center mt-1">
+                <p>
+                  {playerData.chapter}.{playerData.lecture}{" "}
+                  {playerData.lectureTitle}
+                </p>
+                <button className="text-blue-600">
+                  {false ? "Completed" : "Mark Complete"}
+                </button>
               </div>
             </div>
           ) : (
@@ -134,6 +145,7 @@ const Player = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };
