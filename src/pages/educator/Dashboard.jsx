@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Dashboard = () => {
+
+  const [dashboardData, setDashboardData] = useState(null)
+
   return (
     <div>
       <h1>Educator Dashboard</h1>

@@ -10,7 +10,7 @@ const Footer = () => {
     <footer className="bg-gray-900 md:px-36 text-left w-full mt-10">
       <div className='flex flex-col md:flex-row items-start px-8 md:px-0 justify-center gap-10 md:gap-32 py-10 border-b border-white/30'>
         <div className='flex flex-col md:items-start items-center w-full'>
-          <img onClick={() => navigate('/')} src={assets.logo_dark} alt="logo" className='"w-28 lg:w-48 cursor-pointer' />
+          <img onClick={() => navigate('/')} src={assets.logo_dark} alt="logo" className='w-28 lg:w-48 cursor-pointer' />
           <p className="mt-6 text-center md:text-left text-sm text-white/80">
             Skill Grow is a platform that connects learners with educators,
             offering a wide range of courses to help you grow your skills and
