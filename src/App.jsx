@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Routes, useMatch } from 'react-router-dom'
+import "quill/dist/quill.snow.css";
 import Home from './pages/student/Home'
 import CoursesList from './pages/student/CoursesList'
 import CourseDetails from './pages/student/CourseDetails'
