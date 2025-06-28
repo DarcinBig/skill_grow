@@ -61,6 +61,8 @@ const AddCourse = () => {
     }
   }
 
+  
+
   useEffect(() => {
     // Initiate Quill only once
     if (!quillRef.current && editorRef.current) {
@@ -105,11 +107,11 @@ const AddCourse = () => {
             <div key={chapterIndex} className='bg-white border rounded-lg mb-4'>
               <div className='flex justify-between items-center p-4 border-b'>
                 <div className='flex items-center'>
-                  <img src={assets.dropdown_icon} alt="dropdown icon" width={14} className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && "-rotate-90"}`} />
+                  <img onClick={() => handleChapter('toggle', chapter.chapterId)} src={assets.dropdown_icon} alt="dropdown icon" width={14} className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && "-rotate-90"}`} />
                   <span className='font-semibold'>{chapterIndex + 1} {chapter.chapterTitle}</span>
                 </div>
                 <span className='text-gray-500'>{chapter.chapterContent.length} Lectures</span>
-                <img src={assets.cross_icon} alt="cross icon" className='cursor-pointer' />
+                <img onClick={() => handleChapter('remove', chapter.chapterId)} src={assets.cross_icon} alt="cross icon" className='cursor-pointer' />
               </div>
               {!chapter.collapsed && (
                 <div className='p-4'>
