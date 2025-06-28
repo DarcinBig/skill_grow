@@ -61,7 +61,32 @@ const AddCourse = () => {
     }
   }
 
-  
+  const addLecture = () => {
+    setChapters(
+      chapters.map((chapter) => {
+        if (chapter.chapterId === currentChapterId) {
+          const newLecture = {
+            ...lectureDetails,
+            lectureOrder: chapter.chapterContent.length > 0 ? chapter.chapterContent.slice(-1)[0].lectureOrder + 1 : 1,
+            lectureId: uniqid()
+          }
+          chapter.chapterContent.push(newLecture)
+        }
+        return chapter
+      })
+    )
+    setShowPopup(false)
+    setLectureDetails({
+      lectureTitle: '',
+      lectureDuration: '',
+      lectureUrl: '',
+      isPreviewFree: false
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+  }
 
   useEffect(() => {
     // Initiate Quill only once
@@ -74,7 +99,7 @@ const AddCourse = () => {
 
   return (
     <div className='h-screen overflow-scroll flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
-      <form className='flex flex-col gap-4 max-w-md w-full text-gray-500'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4 max-w-md w-full text-gray-500'>
         <div className='flex flex-col gap-1'>
           <p>Course Title</p>
           <input onChange={e => setCourseTitle(e.target.value)} value={courseTitle} type='text' placeholder='Type here' className='outline-one md:py-2.5 py-2 px-3 rounded border-gray-500' required />
@@ -117,7 +142,7 @@ const AddCourse = () => {
                 <div className='p-4'>
                   {chapter.chapterContent.map((lecture, lectureIndex) => (
                     <div key={lectureIndex} className='flex justify-between items-center mb-2'>
-                      <span>{lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins - <a href={lecture.lectureUrl} target='_blank' className='text-blue-500'>Link</a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}</span>
+                      <span>{lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins - <a href={lecture.lectureUrl} target='_blank' className='text-blue-500'>Preview</a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}</span>
                       <img src={assets.cross_icon} alt="cross icon" className='cursor-pointer' onClick={() => handleLecture('remove', chapter.chapterId, lectureIndex)}/>
                     </div>
                   ))}
@@ -147,7 +172,7 @@ const AddCourse = () => {
                   <p>Is preview free?</p>
                   <input type="checkbox" className='mt-1 scale-125' value={lectureDetails.isPreviewFree} onChange={(e) => setLectureDetails({...lectureDetails, isPreviewFree: e.target.checked})} />
                 </div>
-                <button type='button' className='w-full bg-blue-400 text-white px-4 py-2 rounded'>Add</button>
+                <button onClick={addLecture} type='button' className='w-full bg-blue-400 text-white px-4 py-2 rounded'>Add</button>
                 <img onClick={() => setShowPopup(false)} src={assets.cross_icon} alt="cross icon" className='absolute top-4 right-4 w-4 cursor-pointer' />
               </div>
             </div>
