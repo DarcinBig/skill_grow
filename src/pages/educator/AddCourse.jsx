@@ -45,6 +45,22 @@ const AddCourse = () => {
     }
   }
 
+  const handleLecture = (action, chapterId, lectureIndex) => {
+    if (action === 'add') {
+      setCurrentChapterId(chapterId)
+      setShowPopup(true)
+    } else if (action === 'remove') {
+      setChapters (
+        chapters.map((chapter) => {
+          if (chapter.chapterId === chapterId) {
+            chapter.chapterContent.splice(lectureIndex, 1)
+          }
+          return chapter
+        })
+      )
+    }
+  }
+
   useEffect(() => {
     // Initiate Quill only once
     if (!quillRef.current && editorRef.current) {
@@ -89,7 +105,7 @@ const AddCourse = () => {
             <div key={chapterIndex} className='bg-white border rounded-lg mb-4'>
               <div className='flex justify-between items-center p-4 border-b'>
                 <div className='flex items-center'>
-                  <img src={assets.dropdown_icon} alt="dropdown icon" width={14} className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && '-rotate-90'}`} />
+                  <img src={assets.dropdown_icon} alt="dropdown icon" width={14} className={`mr-2 cursor-pointer transition-all ${chapter.collapsed && "-rotate-90"}`} />
                   <span className='font-semibold'>{chapterIndex + 1} {chapter.chapterTitle}</span>
                 </div>
                 <span className='text-gray-500'>{chapter.chapterContent.length} Lectures</span>
@@ -100,17 +116,17 @@ const AddCourse = () => {
                   {chapter.chapterContent.map((lecture, lectureIndex) => (
                     <div key={lectureIndex} className='flex justify-between items-center mb-2'>
                       <span>{lectureIndex + 1} {lecture.lectureTitle} - {lecture.lectureDuration} mins - <a href={lecture.lectureUrl} target='_blank' className='text-blue-500'>Link</a> - {lecture.isPreviewFree ? 'Free Preview' : 'Paid'}</span>
-                      <img src={assets.cross_icon} alt="cross icon" className='cursor-pointer'/>
+                      <img src={assets.cross_icon} alt="cross icon" className='cursor-pointer' onClick={() => handleLecture('remove', chapter.chapterId, lectureIndex)}/>
                     </div>
                   ))}
-                  <div className='inline-flex bg-gray-100 p-2 rounded cursor-pointer mt-2'>+ Add Lecture</div>
+                  <div className='inline-flex bg-gray-100 p-2 rounded cursor-pointer mt-2' onClick={() => handleLecture('add', chapter.chapterId)}>+ Add Lecture</div>
                 </div>
               )}
             </div>
           ))}
           <div className='flex justify-center items-center bg-blue-100 p-2 rounded-lg cursor-pointer' onClick={() => handleChapter('add')}>+ Add Chapter</div>
           {showPopup && (
-            <div className='fixed insert-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
+            <div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50'>
               <div className='bg-white text-gray-700 p-4 rounded relative w-full max-w-80'>
                 <h2 className='text-lg font-semibold mb-4'>Add Lecture</h2>
                 <div className='mb-2'>
@@ -126,7 +142,7 @@ const AddCourse = () => {
                   <input type="text" className='mt-1 block w-full border rounded py-1 px-2' value={lectureDetails.lectureUrl} onChange={(e) => setLectureDetails({...lectureDetails, lectureUrl: e.target.value})} />
                 </div>
                 <div className='flex gap-2 my-4'>
-                  <p>Preview Free</p>
+                  <p>Is preview free?</p>
                   <input type="checkbox" className='mt-1 scale-125' value={lectureDetails.isPreviewFree} onChange={(e) => setLectureDetails({...lectureDetails, isPreviewFree: e.target.checked})} />
                 </div>
                 <button type='button' className='w-full bg-blue-400 text-white px-4 py-2 rounded'>Add</button>
