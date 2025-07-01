@@ -24,11 +24,13 @@ const Player = () => {
     enrolledCourses.map((course) => {
       if (course._id === courseId) {
         setCourseData(course)
-        course.courseRatings.map((item) => {
-          if (item.userId === userData._id) {
-            setInitialRating(item.rating)
-          }
-        })
+        if (userData && course.courseRatings?.length > 0) {
+          course.courseRatings.forEach((item) => {
+            if (item.userId === userData._id) {
+              setInitialRating(item.rating)
+            }
+          })
+        }
       }
     });
   }
@@ -49,7 +51,7 @@ const Player = () => {
   const markLectureAsCompleted = async (lectureId) => {
     try {
       const token = await getToken()
-      const {data} = await axios.post(backendUrl + './api/user/update-course-progress', {courseId, lectureId}, {headers: {Authorization: `Bearer ${token}`}})
+      const {data} = await axios.post(`${backendUrl}/api/user/update-course-progress`, {courseId, lectureId}, {headers: {Authorization: `Bearer ${token}`}})
 
       if (data.success) {
         toast.success(data.message)
@@ -92,6 +94,12 @@ const Player = () => {
       toast.error(error.message)
     }
   }
+
+  const extractYouTubeId = (url) => {
+    const regex = /(?:v=|\/)([0-9A-Za-z_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
 
   useEffect(() => {
     getCourseProgress()
@@ -188,7 +196,7 @@ const Player = () => {
           {playerData ? (
             <div>
               <YouTube
-                videoId={playerData.lectureUrl.split("/").pop()}
+                videoId={extractYouTubeId(playerData.lectureUrl)}
                 iframeClassName="w-full aspect-video"
               />
               <div className="flex justify-between items-center mt-1">

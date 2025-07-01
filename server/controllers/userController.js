@@ -122,7 +122,7 @@ export const addUserRating = async (req, res) => {
         return res.json({success: false, message: 'Invalid Details'})
 
     try {
-        const course = await Course.findById(userId)
+        const course = await Course.findById(courseId)
 
         if (!course)
             return res.json({success: false, message: 'Course not found'})
@@ -132,10 +132,10 @@ export const addUserRating = async (req, res) => {
         if (!user || !user.enrolledCourses.includes(courseId))
             return res.json({success: false, message: 'User has not purchased this course'})
 
-        const existingRatingIndex = course.courseRatings.findIndex(r => r.userId === userId)
+        const existingRating = course.courseRatings.find(r => r.userId === userId)
 
-        if (existingRatingIndex > -1) {
-            course.courseRatings[existingRatingIndex].rating = rating
+        if (existingRating) {
+            courseRatings.rating = rating
         } else {
             course.courseRatings.push({userId, rating})
         }

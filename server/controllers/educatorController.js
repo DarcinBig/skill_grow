@@ -23,13 +23,13 @@ export const updateRoleToEducator = async (req, res) => {
 export const addCourse = async (req, res) => {
     try {
         const {courseData} = req.body
-        const imageFile = req.imageFile
+        const imageFile = req.file
         const {userId: educatorId} = req.auth()
 
         if (!imageFile) {
             return res.json({success: false, message: 'Thumbnail not attached'})
         }    
-        const parsedCourseData = await JSON.parse(courseData)
+        const parsedCourseData = typeof courseData === 'string' ? await JSON.parse(courseData) : courseData
         parsedCourseData.educator = educatorId
         const newCourse = await Course.create(parsedCourseData)
         const imageUpload = await cloudinary.uploader.upload(imageFile.path)
@@ -94,7 +94,7 @@ export const educatorDashboardData = async () => {
 export const getEnrolledStudentsData = async (req, res) => {
     try {
         const {userId: educator} = req.auth()
-        const courses = await Course.find(educator)
+        const courses = await Course.find({educator})
         const courseIds = courses.map(course => course._id)
 
         const purchases = await Purchase.find({
