@@ -106,7 +106,8 @@ export const AppContextProvider = (props) => {
       )
 
       if (data.success) {
-        setEnrolledCourses(data.enrolledCourses.reverse())
+        // console.log("enrolledCourses", data.enrolledCourses.length)
+        setEnrolledCourses(data.enrolledCourses)
       } else {
         toast.error(data.message)
       }

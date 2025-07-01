@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const PurchaseSchema = new mongoose.Schema({
-    courseId: {type: mongoose.Schema.Types.ObjectId,
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Course',
         required:  true
     },
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
