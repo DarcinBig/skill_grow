@@ -38,8 +38,20 @@ export const purchaseCourse = async (req, res) => {
         const {userId} = req.auth()
         const userData = await User.findById(userId)
         const courseData = await Course.findById(courseId)
+
         if (!userData || !courseData)
             return res.json({success: false, message: 'Data not found'})
+
+        const existingPurchase = await Purchase.findOne({
+            userId,
+            courseId,
+            status: {$in: ['pending', 'completed']}
+        })
+
+        if (existingPurchase) {
+            return res.json({success: false, message: 'You already initiated or completed a payment for this course'})
+        }
+
         const purchaseData = {
             courseId: courseData._id,
             userId,

@@ -30,7 +30,7 @@ const MyEnrollments = () => {
 
   useEffect(() => {
     if (userData) {
-      fetUserEnrolledCourses()
+      // fetUserEnrolledCourses()
     }
   }, [userData])
 
