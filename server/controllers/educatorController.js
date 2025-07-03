@@ -94,34 +94,23 @@ export const educatorDashboardData = async (req, res) => {
 export const getEnrolledStudentsData = async (req, res) => {
     try {
         const {userId: educator} = req.auth()
-        const courses = await Course.find({educator})
+        const courses = await Course.find({educator}).select('_id')
         const courseIds = courses.map(course => course._id)
 
         const purchases = await Purchase.find({
             courseId: {$in: courseIds},
             status: 'completed'
         })
-        // .populate('userId', 'name', 'imageUrl').populate('courseId', 'courseTitle')
-        const enrolledStudents = []
+        .populate({path: 'userId', model: 'User', select: 'name imageUrl'})
+        .populate({path: 'courseId', model: 'Course', select: 'courseTitle'})
+        .sort({createdAt: -1})
+        
+        const enrolledStudents = purchases.map(p => ({
+            student: p.userId,
+            courseTitle: p.courseId.courseTitle,
+            purchases: p.createdAt
+        }))
 
-        for (const purchase of purchases) {
-            const student = await User.findById(purchase.userId, 'name imageUrl')
-            const course = await Course.findById(purchase.courseId, 'courseTitle')
-
-            if (student && course) {
-                enrolledStudents.push({
-                    student,
-                    courseTitle: course.courseTitle,
-                    purchaseDate: purchase.createdAt
-                })
-            }
-        }
-
-        /**const enrolledStudents = purchases.map(purchase => ({
-            student: purchase.userId,
-            courseTitle: purchase.courseId.courseTitle,
-            purchaseDate: purchase.createdAt
-        })) */
         res.json({success: true, enrolledStudents})
     } catch (error) {
         res.json({success: false, message: error.message})

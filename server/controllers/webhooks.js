@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import Course from "../models/Course.js";
 import Stripe from "stripe";
 import { Purchase } from "../models/Purchase.js";
+import mongoose from "mongoose";
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -53,10 +54,37 @@ export const clerkWebhooks = async (req, res) => {
   }
 };
 
+/** ================================================================================ */
+
+// DEBUGGING
+
+// Issue: Duplicate registrations for the same course
+
+/** Cause:
+ * 
+ * When the webhook fails with a 500 error, Stripe, by design, retries to send
+ * it several times. If the code manages to enroll the student in a course but
+ * crashes before sending a 200 OK response, Stripe's next attempt will re-execute
+ * the same logic, creating a duplicate. The idempotency checks 
+ * (if (!courseData.enrolledStudents.includes(...)) were fine, but they didn't
+ * protect against a crash in the middle of the operation.
+ * 
+ *
+ */
+
+// Solution: Usage of database transactions. A transaction ensures
+// that all operations (update user, price and purchase) succeed together,
+// or fail together (atomicity). If a single operation fails, all previous
+// modifications are cancelled.
+
+/** ================================================================================ */
+
 // Stripe Webhooks
 export const stripeWebhooks = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
+
+  const session = await mongoose.startSession()
 
   try {
     event = Stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
@@ -68,40 +96,46 @@ export const stripeWebhooks = async (req, res) => {
   try {
     switch (event.type) {
       case "payment_intent.succeeded": {
-        const paymentIntent = event.data.object;
-        const sessionList = await stripeInstance.checkout.sessions.list({
-          payment_intent: paymentIntent.id,
-        });
+        await session.withTransaction(async () => {
+          const paymentIntent = event.data.object;
+          const sessionList = await stripeInstance.checkout.sessions.list({
+            payment_intent: paymentIntent.id,
+          })
 
-        const session = sessionList?.data?.[0];
-        const purchaseId = session?.metadata?.purchaseId;
+          const stripeSession = sessionList?.data?.[0];
+          const purchaseId = stripeSession?.metadata?.purchaseId
+          
+          if (!purchaseId) throw new Error("Missing purchaseId in session metadata");
 
-        if (!purchaseId) throw new Error("Missing purchaseId in session metadata");
+          const purchaseData = await Purchase.findById(purchaseId).session(session)
+          if (!purchaseData) throw new Error("Purchase not found")
 
-        const purchaseData = await Purchase.findById(purchaseId);
-        if (!purchaseData) throw new Error("Purchase not found");
+          if (purchaseData.status === 'completed') {
+            console.log('Purchase already completed. Skipping.')
+            return
+          }
 
-        const userData = await User.findById(purchaseData.userId);
-        const courseData = await Course.findById(purchaseData.courseId);
-        if (!userData || !courseData) throw new Error("User or course not found");
+          const userData = await User.findById(purchaseData.userId).session(session)
+          const courseData = await Course.findById(purchaseData.courseId).session(session)
+          if (!userData || !courseData) throw new Error("User or course not found")
 
-        const userIdStr = userData._id.toString();
-        const courseIdStr = courseData._id.toString();
+          const userIdStr = userData._id.toString()
+          const courseIdStr = courseData._id.toString()
 
-        if (!courseData.enrolledStudents.map(id => id.toString()).includes(userIdStr)) {
-          courseData.enrolledStudents.push(userData._id);
-          await courseData.save();
-        }
+          if (!courseData.enrolledStudents.map(id => id.toString()).includes(userIdStr)) {
+            courseData.enrolledStudents.push(userData._id)
+          }
 
-        if (!userData.enrolledCourses.map(id => id.toString()).includes(courseIdStr)) {
-          userData.enrolledCourses.push(courseData._id);
-          await userData.save();
-        }
+          if (!userData.enrolledCourses.map(id => id.toString()).includes(courseIdStr)) {
+            userData.enrolledCourses.push(courseData._id)
+          }
 
-        purchaseData.status = "completed";
-        await purchaseData.save();
-
-        break;
+          purchaseData.status = "completed";
+          
+          await courseData.save({session})
+          await userData.save({session})
+          await purchaseData.save({session})
+        })
       }
 
       case "payment_intent.payment_failed": {

@@ -147,7 +147,7 @@ export const addUserRating = async (req, res) => {
         const existingRating = course.courseRatings.find(r => r.userId === userId)
 
         if (existingRating) {
-            courseRatings.rating = rating
+            courseRating.rating = rating
         } else {
             course.courseRatings.push({userId, rating})
         }
