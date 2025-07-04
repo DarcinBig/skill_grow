@@ -94,6 +94,8 @@ Whether you’re fixing bugs, adding features or enhancing existing modules, you
 * **Internationalization (i18n)**
   Localize the user interface to support multiple languages.
 
+  ---
+
   ## Screenshot(s) of the app in production
 
 
