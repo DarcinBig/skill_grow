@@ -42,25 +42,28 @@ export const purchaseCourse = async (req, res) => {
         if (!userData || !courseData)
             return res.json({success: false, message: 'Data not found'})
 
-        const existingPurchase = await Purchase.findOne({
-            userId,
-            courseId,
-            status: {$in: ['pending', 'completed']}
-        })
+        // const existingPurchase = await Purchase.findOne({
+        //     userId,
+        //     courseId,
+        //     status: {$in: ['pending', 'completed']}
+        // })
 
-        if (existingPurchase) {
-            return res.json({success: false, message: 'You already initiated or completed a payment for this course'})
-        }
+        // if (existingPurchase) {
+        //     return res.json({success: false, message: 'You already initiated or completed a payment for this course'})
+        // }
 
         const purchaseData = {
             courseId: courseData._id,
             userId,
             amount: (courseData.coursePrice - courseData.discount * courseData.coursePrice / 100).toFixed(2)
         }
+
         const newPurchase = await Purchase.create(purchaseData)
+
         // Stripe gateway initialize
         const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
-        const currency = process.env.CURRENCY.toLocaleLowerCase()
+        const currency = process.env.CURRENCY.toLowerCase()
+
         // Creating line items to for Stripe
         const line_items = [{
             price_data: {
@@ -72,11 +75,13 @@ export const purchaseCourse = async (req, res) => {
             },
             quantity: 1
         }]
+
         const session = await stripeInstance.checkout.sessions.create({
             success_url: `${origin}/loading/my-enrollments`,
-            cancel_url: `${origin}`,
+            cancel_url: `${origin}/`,
             line_items: line_items,
             mode: 'payment',
+            payment_method_types: ['card'],
             metadata: {
                 purchaseId: newPurchase._id.toString()
             }
