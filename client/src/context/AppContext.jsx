@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { dummyCourses } from "../assets/assets"
 import humanizeDuration from "humanize-duration"
 import { useAuth, useUser } from "@clerk/clerk-react"
 import axios from "axios"
@@ -106,7 +105,8 @@ export const AppContextProvider = (props) => {
       )
 
       if (data.success) {
-        setEnrolledCourses(data.enrolledCourses.reverse())
+        // console.log("enrolledCourses", data.enrolledCourses.length)
+        setEnrolledCourses(data.enrolledCourses)
       } else {
         toast.error(data.message)
       }

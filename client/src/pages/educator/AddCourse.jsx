@@ -215,7 +215,7 @@ const AddCourse = () => {
             </div>
           )}
         </div>
-        <button type='submit' className='bg-black text-white w-max py-2.5 px-8 rounded my-4'>
+        <button type='submit' className='bg-black text-white w-max py-2.5 px-8 rounded my-4 cursor-pointer'>
           ADD
         </button>
       </form>
