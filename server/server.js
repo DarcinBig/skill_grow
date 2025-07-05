@@ -12,9 +12,6 @@ import userRouter from './routes/userRoutes.js'
 // Initialize Express
 const app = express()
 
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
-app.post('/clerk', express.json(), clerkWebhooks)
-
 // Connect to database
 await connectDB()
 await connectCloudinary()
@@ -26,9 +23,11 @@ app.use(clerkMiddleware())
 
 // Routes (API Endpoints)
 app.get('/', (req, res) => res.send('API is Working!'))
+app.post('/clerk', express.json(), clerkWebhooks)
 app.use('/api/educator', educatorRouter)
 app.use('/api/course', courseRouter)
 app.use('/api/user', userRouter)
+app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
 
 // Port
 const PORT = process.env.PORT || 5000
