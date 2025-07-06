@@ -62,7 +62,7 @@ export const AppContextProvider = (props) => {
   const calculateRating = (course) => {
     if (course.courseRatings.length === 0) return 0
     let totalRating = 0
-    course.courseRatings.forEach((rating) => {
+    course.courseRatings.forEach(rating => {
       totalRating += rating.rating
     })
     return Math.floor(totalRating / course.courseRatings.length)
@@ -71,7 +71,7 @@ export const AppContextProvider = (props) => {
   // Function to calculate course chapter time
   const calculateChapterTime = (chapter) => {
     let time = 0
-    chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration))
+    chapter.chapterContent.map((lecture) => time += lecture.lectureDuration)
     return humanizeDuration(time * 60 * 1000, { units: ["h", "m"] })
   }
 
@@ -79,8 +79,7 @@ export const AppContextProvider = (props) => {
   const calculateCourseDuration = (course) => {
     let time = 0
     course.courseContent.map((chapter) =>
-      chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration))
-    )
+      chapter.chapterContent.map((lecture) => time += lecture.lectureDuration))
     return humanizeDuration(time * 60 * 1000, { units: ["h", "m"] })
   }
 
@@ -106,7 +105,7 @@ export const AppContextProvider = (props) => {
 
       if (data.success) {
         // console.log("enrolledCourses", data.enrolledCourses.length)
-        setEnrolledCourses(data.enrolledCourses)
+        setEnrolledCourses(data.enrolledCourses.reverse())
       } else {
         toast.error(data.message)
       }
@@ -119,13 +118,8 @@ export const AppContextProvider = (props) => {
     fetchAllCourses()
   }, [])
 
-  // const logToken = async () => {
-  //   console.log(await getToken())
-  // }
-
   useEffect(() => {
     if (user) {
-      // logToken()
       fetchUserData()
       fetUserEnrolledCourses()
     }
