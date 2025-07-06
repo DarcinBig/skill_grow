@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes, useMatch } from 'react-router-dom'
 import "quill/dist/quill.snow.css";
 import { ToastContainer } from 'react-toastify'
-import { Analytics } from '@vercel/analytics'
+import { Analytics } from '@vercel/analytics/react'
 import Home from './pages/student/Home'
 import CoursesList from './pages/student/CoursesList'
 import CourseDetails from './pages/student/CourseDetails'
@@ -22,7 +22,6 @@ const App = () => {
 
   return (
     <div className='text-default min-h-screen bg-white'>
-      <Analytics />
       <ToastContainer />
       {!isEducatorRoute && <Navbar />}
       <Routes>
@@ -40,6 +39,7 @@ const App = () => {
           <Route path='student-enrolled' element={<StudentsEnrolled />} />
         </Route>
       </Routes>
+      <Analytics />
     </div>
   )
 }
