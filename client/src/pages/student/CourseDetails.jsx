@@ -45,7 +45,7 @@ const CourseDetails = () => {
   const enrollCourse = async () => {
     try {
       if (!userData) {
-        toast.warn('Login to enroll')
+        return toast.warn('Login to enroll')
       }
 
       if(isAlreadyEnrolled) {
@@ -71,7 +71,7 @@ const CourseDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (userData, courseData) {
+    if (userData && courseData) {
       setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
     }
   }, [userData, courseData]);

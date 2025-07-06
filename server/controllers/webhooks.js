@@ -51,8 +51,6 @@ export const clerkWebhooks = async (req, res) => {
 
     // res.status(200).json({});
   } catch (error) {
-    // console.error("Clerk Webhook Error:", error);
-    // res.status(200).json({ received: true }); // Évite les retries même en cas d’erreur
     res.json({ success: false, message: error.message })
   }
 }
@@ -71,9 +69,7 @@ export const stripeWebhooks = async (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (error) {
-    // console.error("Stripe webhook signature error:", error);
     return res.status(400).send(`Webhook Error: ${error.message}`)
-    // res.status(500).json({error: 'Internal server error.'})
   }
 
   // Handle the event

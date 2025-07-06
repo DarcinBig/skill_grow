@@ -32,7 +32,7 @@ const Player = () => {
           })
         }
       }
-    });
+    })
   }
 
   const toggleSection = (index) => {
@@ -51,7 +51,7 @@ const Player = () => {
   const markLectureAsCompleted = async (lectureId) => {
     try {
       const token = await getToken()
-      const {data} = await axios.post(`${backendUrl}/api/user/update-course-progress`, {courseId, lectureId}, {headers: {Authorization: `Bearer ${token}`}})
+      const {data} = await axios.post(backendUrl + '/api/user/update-course-progress', {courseId, lectureId}, {headers: {Authorization: `Bearer ${token}`}})
 
       if (data.success) {
         toast.success(data.message)
@@ -204,7 +204,7 @@ const Player = () => {
                   {playerData.chapter}.{playerData.lecture}{" "}
                   {playerData.lectureTitle}
                 </p>
-                <button onClick={() => markLectureAsCompleted(playerData.lectureId)} className="text-blue-600">
+                <button onClick={() => markLectureAsCompleted(playerData.lectureId)} className="text-blue-600 cursor-pointer">
                   {progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? "Completed" : "Mark Complete"}
                 </button>
               </div>
